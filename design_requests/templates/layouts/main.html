@@ -1,16 +1,15 @@
-{% load bootstrap5 %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Django App{% endblock %}</title>
+    <title>{% block title %}Design Pro{% endblock %}</title>
+    {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     {% block extra_head %}{% endblock %}
 </head>
 <body>
     {% block content %}{% endblock %}
-    {% block extra_js %}{% endblock %}
 </body>
 </html>
