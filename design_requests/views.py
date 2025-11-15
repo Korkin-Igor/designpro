@@ -8,3 +8,4 @@ def index(request):
 class CustomUserCreate(CreateView):
     model = CustomUser
     fields = '__all__'
+    template_name = 'registration/register.html'
