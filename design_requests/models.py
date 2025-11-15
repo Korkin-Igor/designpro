@@ -1,9 +1,10 @@
+from re import fullmatch
+
 from django.db.models.functions import Lower
 from django.db import models
 from django.urls import reverse
 from django.db.models import UniqueConstraint
 from django.contrib.auth.models import AbstractUser
-from . import validators
 
 class Category(models.Model):
     name = models.CharField(max_length=100, help_text='Category name')
@@ -25,8 +26,8 @@ class DesignRequest(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
-        null=True,        # ← обязательно!
-        blank=True,       # если форма может быть пустой
+        null=True,
+        blank=True,
         help_text='Design request category'
     )
     photo = models.ImageField(upload_to="uploads/", null=False, blank=False, help_text='Design request photo')
@@ -55,6 +56,6 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.full_name
+def get_absolute_url(self):
+    return reverse("profile:detail", args=[str(self.id)])
 
-    def get_absolute_url(self):
-        return reverse("profile:detail", args=[str(self.id)])

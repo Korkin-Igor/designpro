@@ -6,10 +6,19 @@
     <title>{% block title %}Design Pro{% endblock %}</title>
     {% load bootstrap5 %}
     {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    {% block extra_head %}{% endblock %}
 </head>
 <body>
+    <ul class="nav">
+      <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url "index" %}">Главная</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/">Вход</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/">Регистрация</a>
+      </li>
+    </ul>
     {% block content %}{% endblock %}
 </body>
 </html>
