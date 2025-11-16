@@ -131,3 +131,6 @@ LOGOUT_REDIRECT_URL = '/'
 AUTH_USER_MODEL = 'design_requests.CustomUser'
 
 AUTH_PASSWORD_VALIDATORS = [] # кастомные подсказки + валидация рядом с паролем (по ТЗ ничего нет)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

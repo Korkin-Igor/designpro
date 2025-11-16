@@ -1,4 +1,21 @@
 {% extends "layouts/main.html" %}
 {% block content %}
-
+    <h1>Design.pro</h1>
+    <h5>дизайн-студия по созданию и оформлению интерьеров жилых помещений</h5>
+    {% if design_requests %}
+        <h3>Выполненные нами заявки:</h3>
+        {% for design_request in design_requests %}
+            <h4>{{ design_request.name }}</h4>
+            <p>Категория заявки: {{ design_request.category }}</p>
+            {% if design_request.photo %}
+                <img src="{{ design_request.photo.url }}" alt="Фото помещения" class="img-fluid" style="max-height: 300px;">
+            {% else %}
+                <p>Фото не загружено</p>
+            {% endif %}
+            <p>Создана: {{ design_request.created_at }}</p>
+        {% endfor %}
+    {% endif %}
+    {% if count_requests %}
+        <p>Количество заявок, находящихся в статусе "Принято в работу": {{ count_requests }}</p>
+    {% endif %}
 {% endblock %}
