@@ -129,3 +129,5 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'design_requests.CustomUser'
+
+AUTH_PASSWORD_VALIDATORS = [] # кастомные подсказки + валидация рядом с паролем (по ТЗ ничего нет)

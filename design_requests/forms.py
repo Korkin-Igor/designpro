@@ -9,14 +9,15 @@ class RegistrationForm(UserCreationForm):
         label="ФИО",
         max_length=255,
         widget=forms.TextInput(attrs={'placeholder': 'Иванов Иван Иванович'}),
-        help_text="Только кириллические буквы, дефисы и пробелы"
+        error_messages={
+            "required": "qweqwe"
+        },
     )
 
     login = forms.CharField(
         label="Логин",
         max_length=150,
         widget=forms.TextInput(attrs={'placeholder': 'ivan_ivanov'}),
-        help_text="Только латиница и дефисы"
     )
 
     email = forms.EmailField(
@@ -26,10 +27,14 @@ class RegistrationForm(UserCreationForm):
 
     privacy_agreement = forms.BooleanField(
         label="Согласие на обработку персональных данных",
-        required=True,
-        error_messages={
-            '*': "Вы должны согласиться с обработкой персональных данных."
-        }
+        required=True
+    )
+
+    # переинициализирую password2, чтобы убрать help_text
+    password2 = forms.CharField(
+        label="Подтверждение пароля",
+        widget=forms.PasswordInput,
+        help_text=""
     )
 
     class Meta:
@@ -63,7 +68,7 @@ class RegistrationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if not email:
-            raise ValidationError("Email обязателен.")
+            raise ValidationError(message="Email обязателен.")
         return email
 
     def clean_password(self):
@@ -73,9 +78,8 @@ class RegistrationForm(UserCreationForm):
             raise ValidationError("Пароли не совпадают.")
         return password1
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
+    def save(self):
+        user = super().save()
         user.full_name = self.cleaned_data["full_name"]
-        if commit:
-            user.save()
+        user.save()
         return user

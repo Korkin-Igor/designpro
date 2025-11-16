@@ -4,7 +4,7 @@
 <h2>Вход</h2>
 
 {% if form.errors %}
-  <p>Неправильный логин или пароль!</p>
+  <p class="text-danger">Неправильный логин или пароль!</p>
 {% endif %}
 
 {% if next %}
@@ -37,7 +37,5 @@
   <input type="submit" value="Войти">
   <input type="hidden" name="next" value="{{ next }}">
 </form>
-
-<p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
 
 {% endblock %}

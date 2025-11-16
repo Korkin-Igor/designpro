@@ -5,31 +5,47 @@ from django.db.models import UniqueConstraint
 from django.contrib.auth.models import AbstractUser
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, help_text='Category name')
+    name = models.CharField(max_length=100, help_text='Название категории')
     def __str__(self):
         return self.name
 
     class Meta:
+        verbose_name_plural = "Категории"
         constraints = [
             UniqueConstraint (
                 Lower("name"),
                 name="category_name_lower_uniq",
-                violation_error_message="Category with this name already exists (case-insensitive)."
+                violation_error_message="Такая категория уже есть."
             )
         ]
 
 class DesignRequest(models.Model):
-    name = models.CharField(max_length=100, help_text='Design request name')
-    description = models.TextField(help_text='Design request description')
+    name = models.CharField(max_length=100, help_text='Название')
+    description = models.TextField(help_text='Описание')
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        help_text='Design request category'
+        help_text='Категория заявки'
     )
-    photo = models.ImageField(upload_to="uploads/", null=False, blank=False, help_text='Design request photo')
-    created_at = models.DateTimeField(auto_now_add=True, help_text='Design request creation date')
+
+    STATUS_CHOICES = (
+        ('н', 'Новая'),
+        ('п', 'Принято в работу'),
+        ('в', 'Выполнено'),
+    )
+    status = models.CharField(
+        max_length=100,
+        choices=STATUS_CHOICES,
+    )
+    photo = models.ImageField(
+        upload_to="uploads/",
+        null=False, blank=False,
+        help_text='Фото помещения'
+
+    )
+    created_at = models.DateTimeField(auto_now_add=True, help_text='Временная метка')
 
     def __str__(self):
         return self.name
@@ -38,6 +54,7 @@ class DesignRequest(models.Model):
         return reverse("design_requests:detail", args=[str(self.id)])
 
     class Meta:
+        verbose_name_plural = "Заявки"
         constraints = [
             UniqueConstraint(
                 Lower("name"),
