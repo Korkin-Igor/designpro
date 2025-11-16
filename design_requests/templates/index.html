@@ -2,19 +2,57 @@
 {% block content %}
     <h1>Design.pro</h1>
     <h5>дизайн-студия по созданию и оформлению интерьеров жилых помещений</h5>
-    {% if design_requests %}
+
+    {% if page_obj %}
         <h3>Выполненные нами заявки:</h3>
-        {% for design_request in design_requests %}
-            <h4>{{ design_request.name }}</h4>
-            <p>Категория заявки: {{ design_request.category }}</p>
-            {% if design_request.photo %}
-                <img src="{{ design_request.photo.url }}" alt="Фото помещения" class="img-fluid" style="max-height: 300px;">
-            {% else %}
-                <p>Фото не загружено</p>
-            {% endif %}
-            <p>Создана: {{ design_request.created_at }}</p>
+
+        {% for design_request in page_obj %}
+            <div class="mb-4">
+                <h4>{{ design_request.name }}</h4>
+                <p><strong>Категория:</strong> {{ design_request.category|default:"Не указана" }}</p>
+                {% if design_request.photo %}
+                    <img src="{{ design_request.photo.url }}" alt="Фото помещения">
+                {% else %}
+                    <p>Фото не загружено</p>
+                {% endif %}
+                <p><small>Создана: {{ design_request.created_at|date:"d.m.Y H:i" }}</small></p>
+            </div>
+        {% empty %}
+            <p>Нет выполненных заявок.</p>
         {% endfor %}
+
+        {% if page_obj.has_other_pages %}
+            <nav aria-label="Пагинация заявок">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; Первая</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
     {% endif %}
+
+    <!-- Счётчик заявок в статусе "в работе" -->
     {% if count_requests %}
         <p>Количество заявок, находящихся в статусе "Принято в работу": {{ count_requests }}</p>
     {% endif %}

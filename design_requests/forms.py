@@ -1,85 +1,42 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+
 from .models import CustomUser
+import re
 
-
-class RegistrationForm(UserCreationForm):
+class CustomUserCreationForm(UserCreationForm):
     full_name = forms.CharField(
-        label="ФИО",
         max_length=255,
-        widget=forms.TextInput(attrs={'placeholder': 'Иванов Иван Иванович'}),
-        error_messages={
-            "required": "qweqwe"
-        },
+        required=True,
+        label="ФИО",
+        widget=forms.TextInput()
     )
 
     login = forms.CharField(
+        max_length=255,
+        required=True,
         label="Логин",
-        max_length=150,
-        widget=forms.TextInput(attrs={'placeholder': 'ivan_ivanov'}),
+        widget=forms.TextInput()
     )
 
-    email = forms.EmailField(
-        label="Email",
-        widget=forms.EmailInput(attrs={'placeholder': 'user@example.com'})
-    )
-
-    privacy_agreement = forms.BooleanField(
+    privacyConsent = forms.BooleanField(
+        required=True,
         label="Согласие на обработку персональных данных",
-        required=True
-    )
-
-    # переинициализирую password2, чтобы убрать help_text
-    password2 = forms.CharField(
-        label="Подтверждение пароля",
-        widget=forms.PasswordInput,
-        help_text=""
+        widget=forms.CheckboxInput(),
+        help_text="Я соглашаюсь"
     )
 
     class Meta:
         model = CustomUser
-        fields = ['full_name', 'login', 'email', 'password1', 'password2']
+        fields = ('full_name', 'login', 'email', 'password1', 'password2', 'privacyConsent')
 
     def clean_full_name(self):
         full_name = self.cleaned_data.get('full_name')
-        if not full_name:
-            raise ValidationError("Поле ФИО обязательно для заполнения.")
 
-        for char in full_name:
-            if not (char.isalpha() or char in ' -' or char == 'ё' or char == 'Ё'):
-                raise ValidationError("ФИО может содержать только кириллические буквы, пробелы и дефисы.")
+        if not re.search('^[а-яА-Я\-\s]+$', full_name):
+            raise ValidationError(message="ФИО может состоять только из кириллических буквы, дефисов и пробелов")
         return full_name
 
-    def clean_login(self):
-        login = self.cleaned_data.get('login')
-        if not login:
-            raise ValidationError("Логин обязателен.")
-
-        for char in login:
-            if not (char.isalnum() or char == '-'):
-                raise ValidationError("Логин может содержать только латинские буквы, цифры и дефисы.")
-
-        if CustomUser.objects.filter(username=login).exists():
-            raise ValidationError("Пользователь с таким логином уже существует.")
-
-        return login
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if not email:
-            raise ValidationError(message="Email обязателен.")
-        return email
-
-    def clean_password(self):
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
-            raise ValidationError("Пароли не совпадают.")
-        return password1
-
-    def save(self):
-        user = super().save()
-        user.full_name = self.cleaned_data["full_name"]
-        user.save()
-        return user
+    def clean_password2(self):
+        pass

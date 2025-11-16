@@ -14,9 +14,9 @@
 <form method="post" action="{% url 'login' %}">
   {% csrf_token %}
 
-  <div style="max-width: 1600px">
+  <div style="max-width: 1300px">
       <div class="row pb-2">
-        <label class="col-sm-3">
+        <label class="col-sm-2">
           {{ form.username.label }}
         </label>
         <div class="col-sm-1">
@@ -24,17 +24,17 @@
         </div>
       </div>
 
-      <div class="row">
-        <label class="col-sm-3">
+      <div class="row pb-2">
+        <label class="col-sm-2">
           {{ form.password.label }}
         </label>
-        <div class="col-sm-9">
+        <div class="col-sm-1">
           {{ form.password }}
         </div>
       </div>
   </div>
 
-  <input type="submit" value="Войти">
+  <input type="submit" class="btn btn-primary" value="Войти">
   <input type="hidden" name="next" value="{{ next }}">
 </form>
 
