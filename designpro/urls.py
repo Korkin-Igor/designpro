@@ -18,12 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 
-from design_requests.views import CustomUserCreate
+from design_requests import views
 
 urlpatterns = [
     path('', RedirectView.as_view(url='/design_requests')),
     path('superadmin/', admin.site.urls),
     path('design_requests/', include('design_requests.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/register', CustomUserCreate.as_view(), name='register'),
+    path('accounts/register', views.register, name='register'),
 ]

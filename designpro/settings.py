@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'design_requests',
+    'design_requests.apps.DesignRequestsConfig',
     'bootstrap5',
 ]
 

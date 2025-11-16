@@ -1,4 +1,43 @@
 {% extends "layouts/main.html" %}
 {% block content %}
-вход
+
+<h2>Вход</h2>
+
+{% if form.errors %}
+  <p>Неправильный логин или пароль!</p>
+{% endif %}
+
+{% if next %}
+  <p>Вам нужно авторизоваться, чтобы видеть эту страницу!</p>
+{% endif %}
+
+<form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+
+  <div style="max-width: 1600px">
+      <div class="row pb-2">
+        <label class="col-sm-3">
+          {{ form.username.label }}
+        </label>
+        <div class="col-sm-1">
+          {{ form.username }}
+        </div>
+      </div>
+
+      <div class="row">
+        <label class="col-sm-3">
+          {{ form.password.label }}
+        </label>
+        <div class="col-sm-9">
+          {{ form.password }}
+        </div>
+      </div>
+  </div>
+
+  <input type="submit" value="Войти">
+  <input type="hidden" name="next" value="{{ next }}">
+</form>
+
+<p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+
 {% endblock %}

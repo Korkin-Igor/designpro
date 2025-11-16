@@ -47,13 +47,10 @@ class DesignRequest(models.Model):
         ]
 
 class CustomUser(AbstractUser):
-    full_name = models.CharField(
-        max_length=255,
-        help_text='Profile first name, last name and patronymic (only Cyrillic letters, hyphens, and spaces)'
-    )
+    full_name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.full_name
-def get_absolute_url(self):
-    return reverse("profile:detail", args=[str(self.id)])
 
+    def get_absolute_url(self):
+        return reverse("profile:detail", args=[str(self.id)])
