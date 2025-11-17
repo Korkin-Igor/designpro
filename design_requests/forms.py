@@ -27,13 +27,13 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_full_name(self):
         full_name = self.cleaned_data.get('full_name')
-        if not re.fullmatch(r'[а-яА-ЯёЁ\s\-]+', full_name):
+        if not re.fullmatch(r'[А-яёЁ\s\-]+', full_name):
             raise ValidationError("ФИО может состоять только из кириллических букв, пробелов и дефисов")
         return full_name
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        if not re.fullmatch(r'[a-zA-Z\-]+', username):
+        if not re.fullmatch(r'[A-z\-]+', username):
             raise ValidationError("Логин может состоять только из латинских букв и дефисов")
         if CustomUser.objects.filter(username=username).exists():
             raise ValidationError("Такой логин уже зарегистрирован")
