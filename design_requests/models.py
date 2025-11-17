@@ -65,6 +65,6 @@ class DesignRequest(models.Model):
             UniqueConstraint(
                 Lower("name"),
                 name="design_request_name_lower_uniq",
-                violation_error_message="Category with this name already exists (case-insensitive)."
+                violation_error_message="Категория с таким названием уже существует"
             )
         ]

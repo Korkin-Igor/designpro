@@ -14,13 +14,11 @@ class CustomUserCreationForm(UserCreationForm):
         max_length=255,
         required=True,
         label="Логин",
-        help_text="Только латинские буквы и дефисы"
     )
     email = forms.EmailField(required=True)
     privacyConsent = forms.BooleanField(
         required=True,
         label="Согласие на обработку персональных данных",
-        help_text="Я соглашаюсь"
     )
 
     class Meta:
@@ -40,3 +38,11 @@ class CustomUserCreationForm(UserCreationForm):
         if CustomUser.objects.filter(username=username).exists():
             raise ValidationError("Такой логин уже зарегистрирован")
         return username
+
+    def clean_password1(self):
+        password1 = self.cleaned_data.get('password1')
+
+        if (len(password1) < 8):
+            raise ValidationError('Пароль должен состоять минимум из 8 символов')
+
+        return password1
