@@ -1,28 +1,44 @@
 {% extends "layouts/main.html" %}
 {% block content %}
-    <h1>Design.pro</h1>
-    <h5>дизайн-студия по созданию и оформлению интерьеров жилых помещений</h5>
 
-    {% if page_obj %}
-        <h3>Выполненные нами заявки:</h3>
+        <!-- Основной контейнер с сеткой -->
+        <div class="container">
+            <h1>Design.pro</h1>
+            <h5>дизайн-студия по созданию и оформлению интерьеров жилых помещений</h5>
 
-        {% for design_request in page_obj %}
-            <div class="mb-4">
-                <h4>{{ design_request.name }}</h4>
-                <p><strong>Категория:</strong> {{ design_request.category|default:"Не указана" }}</p>
-                {% if design_request.photo %}
-                    <img src="{{ design_request.photo.url }}" alt="Фото помещения">
-                {% else %}
-                    <p>Фото не загружено</p>
-                {% endif %}
-                <p><small>Создана: {{ design_request.created_at|date:"d.m.Y H:i" }}</small></p>
+            {% if page_obj %}
+            <h3>Выполненные нами заявки:</h3>
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                {% for design_request in page_obj %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <!-- Изображение (если есть) -->
+                            {% if design_request.photo %}
+                                <img src="{{ design_request.photo.url }}" class="card-img-top" alt="Фото помещения" style="height: auto; object-fit: cover;">
+                            {% else %}
+                                <!-- Если фото нет — заглушка -->
+                                <div class="card-body text-center bg-light">
+                                    <p class="text-muted mb-0">📷 Фото не загружено</p>
+                                </div>
+                            {% endif %}
+
+                            <!-- Тело карточки -->
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ design_request.name }}</h5>
+                                <p class="card-text"><strong>Категория:</strong> {{ design_request.category|default:"Не указана" }}</p>
+                                <p class="card-text mt-auto">
+                                    <small class="text-muted">Создана: {{ design_request.created_at|date:"d.m.Y H:i" }}</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-        {% empty %}
-            <p>Нет выполненных заявок.</p>
-        {% endfor %}
+        </div>
 
+        <!-- Пагинация -->
         {% if page_obj.has_other_pages %}
-            <nav aria-label="Пагинация заявок">
+            <nav aria-label="Пагинация заявок" class="mt-4">
                 <ul class="pagination justify-content-center">
                     {% if page_obj.has_previous %}
                         <li class="page-item">
@@ -50,10 +66,18 @@
                 </ul>
             </nav>
         {% endif %}
+
+    {% else %}
+        <div class="alert alert-info mt-4">
+            Нет выполненных заявок.
+        </div>
     {% endif %}
 
-    <!-- Счётчик заявок в статусе "в работе" -->
+    <!-- Счётчик в работе -->
     {% if count_requests %}
-        <p>Количество заявок, находящихся в статусе "Принято в работу": {{ count_requests }}</p>
+        <div class="mt-4">
+            <p>Количество заявок, находящихся в статусе "Принято в работу": <strong>{{ count_requests }}</strong></p>
+        </div>
     {% endif %}
+
 {% endblock %}

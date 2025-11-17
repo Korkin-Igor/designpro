@@ -4,6 +4,12 @@ from django.urls import reverse
 from django.db.models import UniqueConstraint
 from django.contrib.auth.models import AbstractUser
 
+class CustomUser(AbstractUser):
+    full_name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.full_name
+
 class Category(models.Model):
     name = models.CharField(max_length=100, help_text='Название категории')
     def __str__(self):
@@ -62,12 +68,3 @@ class DesignRequest(models.Model):
                 violation_error_message="Category with this name already exists (case-insensitive)."
             )
         ]
-
-class CustomUser(AbstractUser):
-    full_name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.full_name
-
-    def get_absolute_url(self):
-        return reverse("profile:detail", args=[str(self.id)])
