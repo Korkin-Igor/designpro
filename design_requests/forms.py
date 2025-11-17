@@ -1,8 +1,13 @@
+import os
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 import re
-from .models import CustomUser
+
+from . import models
+from .models import CustomUser, DesignRequest, Category
+
 
 class CustomUserCreationForm(UserCreationForm):
     full_name = forms.CharField(
@@ -46,3 +51,46 @@ class CustomUserCreationForm(UserCreationForm):
             raise ValidationError('Пароль должен состоять минимум из 8 символов')
 
         return password1
+
+class DesignRequestForm(forms.ModelForm):
+    name = forms.CharField(
+        max_length=255,
+        required=True,
+        label="Название"
+    )
+
+    description = forms.CharField(
+        max_length=255,
+        required=True,
+        label="Описание"
+    )
+
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        required=True,
+        label="Категория",
+        empty_label="Выберите категорию"
+    )
+
+    photo = forms.ImageField(
+        required=True,
+        label="Фото помещения"
+    )
+
+    class Meta:
+        model = DesignRequest
+        fields = ['name', 'description', 'category', 'photo']
+
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo')
+
+        allowed_extensions = ('.jpg', '.jpeg', '.png', '.bmp')
+        ext = os.path.splitext(photo.name)[1].lower()
+        if ext not in allowed_extensions:
+            raise ValidationError(message="Формат фото должен быть JPG, JPEG, PNG или BMP.")
+
+        max_size = 2 * 1024 * 1024
+        if photo.size > max_size:
+            raise ValidationError(message="Размер фото не должен превышать 2 МБ.")
+
+        return photo

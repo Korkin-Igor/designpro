@@ -1,8 +1,8 @@
 from django.db.models.functions import Lower
 from django.db import models
-from django.urls import reverse
 from django.db.models import UniqueConstraint
 from django.contrib.auth.models import AbstractUser
+from django.urls import reverse
 
 class CustomUser(AbstractUser):
     full_name = models.CharField(max_length=255)
@@ -21,13 +21,14 @@ class Category(models.Model):
             UniqueConstraint (
                 Lower("name"),
                 name="category_name_lower_uniq",
-                violation_error_message="Такая категория уже есть."
+                violation_error_message="Такая категория уже есть"
             )
         ]
 
 class DesignRequest(models.Model):
     name = models.CharField(max_length=100, help_text='Название')
     description = models.TextField(help_text='Описание')
+
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -41,16 +42,27 @@ class DesignRequest(models.Model):
         ('п', 'Принято в работу'),
         ('в', 'Выполнено'),
     )
+
     status = models.CharField(
-        max_length=100,
+        max_length=1,
         choices=STATUS_CHOICES,
+        default='н'
     )
+
     photo = models.ImageField(
         upload_to="uploads/",
-        null=False, blank=False,
+        null=False,
+        blank=False,
         help_text='Фото помещения'
-
     )
+
+    user = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='design_requests',
+        help_text='Пользователь, создавший заявку'
+    )
+
     created_at = models.DateTimeField(auto_now_add=True, help_text='Временная метка')
 
     def __str__(self):
@@ -65,6 +77,6 @@ class DesignRequest(models.Model):
             UniqueConstraint(
                 Lower("name"),
                 name="design_request_name_lower_uniq",
-                violation_error_message="Категория с таким названием уже существует"
+                violation_error_message="Заявка с таким названием уже существует"
             )
         ]

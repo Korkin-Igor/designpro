@@ -1,0 +1,47 @@
+{% extends 'layouts/main.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Создать заявку на дизайн</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      {{ form.name.label_tag }}
+      {{ form.name }}
+      {% if form.name.errors %}
+        <div class="text-danger">{{ form.name.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="mb-3">
+      {{ form.description.label_tag }}
+      {{ form.description }}
+      {% if form.description.errors %}
+        <div class="text-danger">{{ form.description.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="mb-3">
+      {{ form.category.label_tag }}
+      {{ form.category }}
+      {% if form.category.errors %}
+        <div class="text-danger">{{ form.category.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="mb-3">
+      {{ form.photo.label_tag }}
+      {{ form.photo }}
+      {% if form.photo.errors %}
+        <div class="text-danger">{{ form.photo.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="mb-3">
+      {{ form.status.label_tag }}
+      {{ form.status }}
+      {% if form.status.errors %}
+        <div class="text-danger">{{ form.status.errors }}</div>
+      {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Создать</button>
+    <a href="{% url 'my_design_requests' %}" class="btn btn-secondary">Отмена</a>
+  </form>
+</div>
+{% endblock %}
