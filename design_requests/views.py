@@ -132,5 +132,4 @@ class CategoryCreateView(CreateView):
 @method_decorator(permission_required('design_requests.can_manage_categories', raise_exception=True), name='dispatch')
 class CategoryDeleteView(DeleteView):
     model = Category
-    template_name = 'design_requests/category_confirm_delete.html'
     success_url = reverse_lazy('categories')

@@ -16,8 +16,7 @@
         {{ cat.name }}
         <form method="post" action="{% url 'category_delete' cat.pk %}" class="d-inline">
           {% csrf_token %}
-          <button type="submit" class="btn btn-sm btn-outline-danger" 
-              onclick="return confirm('Удалить категорию и все её заявки?')">Удалить</button>
+          <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
         </form>
       </div>
     {% endfor %}
