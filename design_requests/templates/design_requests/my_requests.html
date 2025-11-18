@@ -44,11 +44,19 @@
                     <small class="mt-auto text-muted">
                         Создана: {{ req.created_at }}
                     </small>
+                    {% if req.comment %}
+                        <small class="mt-auto text-muted">
+                            Комментарий от администрации: {{ req.comment }}
+                        </small>
+                    {% endif %}
+                {% if design_photo %}
+                    <img src="{{ req.design_photo.url }}" class="card-img-top" alt="Фото готового дизайна" style="height: 200px; object-fit: cover;">
+                {% endif %}
                 </div>
                 {% if req.status == 'н'%}
-                <div class="card-footer bg-white border-0">
-                    <a href="{% url 'delete_design_request' req.pk %}" class="btn btn-sm btn-danger w-100">Удалить</a>
-                </div>
+                    <div class="card-footer bg-white border-0">
+                        <a href="{% url 'delete_design_request' req.pk %}" class="btn btn-sm btn-danger w-100">Удалить</a>
+                    </div>
                 {% endif %}
             </div>
         </div>

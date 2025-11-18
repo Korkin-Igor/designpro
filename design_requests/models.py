@@ -74,7 +74,7 @@ class DesignRequest(models.Model):
     design_photo = models.ImageField(
         upload_to="designs/",
         null=True,
-        help_text='Готовый дизайн (только при статусе "Выполнено")'
+        help_text='Готовый дизайн'
     )
 
     def __str__(self):
