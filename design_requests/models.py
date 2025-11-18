@@ -8,7 +8,7 @@ class CustomUser(AbstractUser):
     full_name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.full_name
+        return self.username
 
 class Category(models.Model):
     name = models.CharField(max_length=100, help_text='Название категории')
@@ -17,6 +17,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Категории"
+        permissions = (('can_manage_categories', 'Пользователь может управлять категориями'),)
         constraints = [
             UniqueConstraint (
                 Lower("name"),
@@ -31,7 +32,7 @@ class DesignRequest(models.Model):
 
     category = models.ForeignKey(
         Category,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
         help_text='Категория заявки'
@@ -50,7 +51,7 @@ class DesignRequest(models.Model):
     )
 
     photo = models.ImageField(
-        upload_to="uploads/",
+        upload_to="user_photos/",
         null=False,
         blank=False,
         help_text='Фото помещения'
@@ -65,6 +66,17 @@ class DesignRequest(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, help_text='Временная метка')
 
+    # для админа
+    comment = models.TextField(
+        null=True,
+        help_text='Комментарий при принятии в работу'
+    )
+    design_photo = models.ImageField(
+        upload_to="designs/",
+        null=True,
+        help_text='Готовый дизайн (только при статусе "Выполнено")'
+    )
+
     def __str__(self):
         return self.name
 
@@ -73,6 +85,7 @@ class DesignRequest(models.Model):
 
     class Meta:
         verbose_name_plural = "Заявки"
+        permissions = (('can_manage_requests', 'Пользователь может редактировать заявки'),)
         constraints = [
             UniqueConstraint(
                 Lower("name"),

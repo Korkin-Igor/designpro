@@ -1,0 +1,16 @@
+{% extends 'layouts/main.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>{% if object %}Редактировать категорию{% else %}Добавить категорию{% endif %}</h2>
+  <form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <button type="submit" class="btn btn-primary">
+      {% if object %}Сохранить{% else %}Добавить{% endif %}
+    </button>
+    <a href="{% url 'categories' %}" class="btn btn-secondary">Отмена</a>
+  </form>
+</div>
+{% endblock %}

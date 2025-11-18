@@ -1,11 +1,8 @@
 import os
-
-from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 import re
-
-from . import models
+from django import forms
 from .models import CustomUser, DesignRequest, Category
 
 
@@ -94,3 +91,29 @@ class DesignRequestForm(forms.ModelForm):
             raise ValidationError(message="Размер фото не должен превышать 2 МБ.")
 
         return photo
+
+class DesignRequestUpdateForm(forms.ModelForm):
+    comment = forms.CharField(
+        required=True,
+        max_length=255,
+        label="Комментарий"
+    )
+
+    design_photo = forms.ImageField(
+        required=True,
+        label="Изображение готового дизайна"
+    )
+
+    STATUS_CHOICES_WITHOUT_NEW = [
+        (value, label) for value, label in DesignRequest.STATUS_CHOICES
+        if value != 'н'
+    ]
+
+    status = forms.ChoiceField(
+        choices=STATUS_CHOICES_WITHOUT_NEW,
+        label="Новый статус"
+    )
+
+    class Meta:
+        model = DesignRequest
+        fields = ['status', 'comment', 'design_photo']

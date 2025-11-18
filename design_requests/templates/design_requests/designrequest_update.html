@@ -1,0 +1,33 @@
+{% extends 'layouts/main.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Изменить статус заявки "{{ object.name }}"</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+    
+    {% for field in form %}
+      <div class="mb-3">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+          <div class="text-danger">{{ field.errors }}</div>
+        {% endif %}
+        {% if field.help_text %}
+          <small class="form-text text-muted">{{ field.help_text }}</small>
+        {% endif %}
+      </div>
+    {% endfor %}
+    
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="{% url 'all_design_requests' %}" class="btn btn-secondary">Отмена</a>
+  </form>
+</div>
+{% endblock %}

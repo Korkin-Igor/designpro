@@ -37,12 +37,12 @@
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">{{ req.name }}</h5>
                     <p class="card-description">{{ req.description }}</p>
-                    <p class="card-text"><small>Категория: {{ req.category|default:"—" }}</small></p>
+                    <p class="card-text"><small>Категория: {{ req.category }}</small></p>
                     <p class="card-text">
                         Статус: {{req.get_status_display}}
                      </p>
                     <small class="mt-auto text-muted">
-                        Создана: {{ req.created_at|date:"d.m.Y H:i" }}
+                        Создана: {{ req.created_at }}
                     </small>
                 </div>
                 <div class="card-footer bg-white border-0">

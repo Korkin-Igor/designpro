@@ -1,0 +1,70 @@
+{% extends 'layouts/main.html' %}
+
+{% block content %}
+  <h2>Все заявки</h2>
+
+    <form method="get" class="mb-4">
+      <div class="row align-items-end">
+        <div class="col-md-4">
+          <label for="status" class="form-label">Фильтр по статусу:</label>
+          <select name="status" id="status" class="form-select">
+            <option value="">Все статусы</option>
+            {% for value, label in STATUS_CHOICES %}
+              {{value}}
+              <option value="{{value}}" {% if selected_status == value %}selected{% endif %}>
+                {{ label }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-outline-primary">Применить</button>
+        </div>
+        {% if selected_status %}
+          <div class="col-md-2">
+            <a href="{% url 'all_design_requests' %}" class="btn btn-outline-secondary">Сбросить</a>
+          </div>
+        {% endif %}
+      </div>
+    </form>
+
+  {% if requests %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+      {% for req in requests %}
+          <div class="col">
+            <div class="card h-100">
+              <img src="{{ req.photo.url }}" class="card-img-top" alt="Фото" style="height: 200px; object-fit: cover;">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ req.name }}</h5>
+                <p class="card-description">{{ req.description }}</p>
+                <p class="card-text"><small>Категория: {{ req.category|default:"—" }}</small></p>
+                <p class="card-text">
+                  Статус: {{ req.get_status_display }}
+                </p>
+                <small class="mt-auto text-muted">
+                  Создана: {{ req.created_at|date:"d.m.Y H:i" }}
+                </small>
+              </div>
+
+              {% if req.status == 'н' %}
+                <div class="card-footer bg-white border-0">
+                  <div class="d-grid gap-2">
+                    <a href="{% url 'set_status_working' req.pk %}" class="btn btn-sm btn-warning">В работу</a>
+                    <a href="{% url 'set_status_done' req.pk %}" class="btn btn-sm btn-success">Выполнено</a>
+                  </div>
+                </div>
+              {% elif req.status == 'п' %}
+                <div class="card-footer bg-white border-0">
+                  <div class="d-grid gap-2">
+                    <a href="{% url 'set_status_done' req.pk %}" class="btn btn-sm btn-success">Выполнено</a>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Заявок нет.</p>
+  {% endif %}
+{% endblock %}
