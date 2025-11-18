@@ -45,9 +45,11 @@
                         Создана: {{ req.created_at }}
                     </small>
                 </div>
+                {% if req.status == 'н'%}
                 <div class="card-footer bg-white border-0">
                     <a href="{% url 'delete_design_request' req.pk %}" class="btn btn-sm btn-danger w-100">Удалить</a>
                 </div>
+                {% endif %}
             </div>
         </div>
       {% endfor %}
