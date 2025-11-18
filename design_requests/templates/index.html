@@ -1,7 +1,6 @@
 {% extends "layouts/main.html" %}
 {% block content %}
 
-        <!-- Основной контейнер с сеткой -->
         <div class="container">
             <h1>Design.pro</h1>
             <h5>дизайн-студия по созданию и оформлению интерьеров жилых помещений</h5>
@@ -12,17 +11,14 @@
                 {% for design_request in page_obj %}
                     <div class="col">
                         <div class="card h-100">
-                            <!-- Изображение (если есть) -->
                             {% if design_request.photo %}
                                 <img src="{{ design_request.photo.url }}" class="card-img-top" alt="Фото помещения" style="height: auto; object-fit: cover;">
                             {% else %}
-                                <!-- Если фото нет — заглушка -->
                                 <div class="card-body text-center bg-light">
-                                    <p class="text-muted mb-0">📷 Фото не загружено</p>
+                                    <p class="text-muted mb-0">Фото не загружено</p>
                                 </div>
                             {% endif %}
 
-                            <!-- Тело карточки -->
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">{{ design_request.name }}</h5>
                                 <p class="card-text"><strong>Категория:</strong> {{ design_request.category|default:"Не указана" }}</p>
@@ -36,7 +32,6 @@
             </div>
         </div>
 
-        <!-- Пагинация -->
         {% if page_obj.has_other_pages %}
             <nav aria-label="Пагинация заявок" class="mt-4">
                 <ul class="pagination justify-content-center">
@@ -73,7 +68,6 @@
         </div>
     {% endif %}
 
-    <!-- Счётчик в работе -->
     {% if count_requests %}
         <div class="mt-4">
             <p>Количество заявок, находящихся в статусе "Принято в работу": <strong>{{ count_requests }}</strong></p>
